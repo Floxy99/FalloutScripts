@@ -1,0 +1,4 @@
+#!/bin/zsh
+if $# -h ; then
+    echo -e "Help text"
+fi
