@@ -1,4 +1,13 @@
 #!/bin/zsh
-if $# -h ; then
-    echo -e "Help text"
-fi
+
+scrap=0
+
+for arg in $@; do
+    if [[ $arg == <-> ]]; then
+        (( scrap += $arg ))
+        echo $scrap
+    fi
+    if [[ $arg == "-r" ]]; then
+        echo $(( $RANDOM % 10 + 1 ))
+    fi
+done
