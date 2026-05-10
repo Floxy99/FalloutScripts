@@ -1,0 +1,58 @@
+#!/bin/zsh
+
+scrap=0
+commonMaterial=0
+uncommonMaterial=0
+rareMaterial=0
+
+minutesPassedPerItem=10
+scrapperPerk=0
+scrapperPerkSet=false
+
+for arg in $@; do
+    if [[ $arg == "-h" ]]; then
+        echo "usage: salvage 1 -s1 (salvage 1 scrap with scrapper Perk rank 1)"
+    fi
+    if [[ $arg == <-> ]]; then
+        (( scrap += $arg ))
+    fi
+    if [[ $arg == "-s1" && $scrapperPerkSet == false ]]; then
+        scrapperPerk=1
+        scrapperPerkSet=true
+    fi
+    if [[ $arg == "-s2" && $scrapperPerkSet == false ]]; then
+        scrapperPerk=2
+        scrapperPerkSet=true
+    fi
+done
+
+echo -e salvaging $scrap scrap
+
+i=0
+roll=0
+rareSwitch=false
+while ((i < scrap)) ; do
+    roll=$(($RANDOM % 6 + 1))
+    if ((roll == 1));then
+        (( commonMaterial += 1))
+    fi
+    if (($roll == 2));then
+        (( commonMaterial += 2))
+    fi
+    if (($roll == 5 || $roll == 6));then
+        (( commonMaterial += 1))
+        if (( scrapperPerk > 0)); then
+            (( uncommonMaterial += 1))
+        fi
+        if (( scrapperPerk > 1 && rareSwitch)); then
+            (( rareMaterial += 1))
+        fi
+        (( rareSwitch = !rareSwitch))
+    fi
+    (( i += 1 ))
+done
+
+echo -e you got:
+echo -e $commonMaterial common material
+echo -e $uncommonMaterial uncommon material
+echo -e $rareMaterial rare material
