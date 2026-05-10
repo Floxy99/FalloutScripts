@@ -1,13 +1,23 @@
 #!/bin/zsh
 
 scrap=0
+minutesPassedPerItem=10
+scrapperPerk=0
+scrapperPerkSet=false
 
 for arg in $@; do
+    if [[ $arg == "-h" ]]; then
+        echo "usage: salvage 1 -s1 (salvage 1 scrap with scrapper Perk rank 1)"
+    fi
     if [[ $arg == <-> ]]; then
         (( scrap += $arg ))
-        echo $scrap
     fi
-    if [[ $arg == "-r" ]]; then
-        echo $(( $RANDOM % 10 + 1 ))
+    if [[ $arg == "-s1" && $scrapperPerkSet == false ]]; then
+        scrapperPerk=1
+        scrapperPerkSet=true
+    fi
+    if [[ $arg == "-s2" && $scrapperPerkSet == false ]]; then
+        scrapperPerk=2
+        scrapperPerkSet=true
     fi
 done
